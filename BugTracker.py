@@ -14,16 +14,20 @@ def main():
 
     # Umeng统计出来的内存地址list
     thefile = open(bug_adress_list_name)
-    file_list = thefile.readlines()
-    for line in set(file_list):
-    	# strip(): 去掉末尾'\n'
-        print("--- %s --- %s ---" % (line.strip(), len(line.strip())))
-        if len(line.strip()) == 11:
+    line = thefile.readline()
+    while line:
+        # strip(): 去掉末尾'\n'
+        if len(line.strip()) == 11: # arm64
+            print("--- arm64 --- %s ---" % line.strip())
             os.system('xcrun atos -arch arm64 -o %s %s' % (project_name, line))
-            print("arm64")
-        elif len(line.strip()) == 8: 
-            print("armv7")
+        elif len(line.strip()) == 8: # armv7
+            print("--- armv7 --- %s ---" % line.strip())
             os.system('xcrun atos -arch armv7 -o %s %s' % (project_name, line))
+        else : # 用作分割线等特殊行处理
+            print(line)
+        # 读取下一行
+        line = thefile.readline()
+
     # 关闭文件
     thefile.close()
 # 执行
